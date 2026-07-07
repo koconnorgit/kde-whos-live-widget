@@ -978,9 +978,17 @@ PlasmoidItem {
                 var meta = modelData.game.length > 0 ? modelData.game + " • " + v : v;
                 return modelData.title.length > 0 ? modelData.title + "\n" + meta : meta;
             }
-            QQC2.ToolTip.text: chip.tipText
-            QQC2.ToolTip.visible: root.showTooltip && root.orientation === 0 && hover.hovered
-            QQC2.ToolTip.delay: Kirigami.Units.toolTipDelay
+            // Plasma's ToolTipArea renders in a dedicated tooltip window that
+            // stacks above normal windows; a QQC2.ToolTip draws inside the
+            // widget's own scene, so on the desktop layer it was covered by
+            // any window overlapping the widget.
+            PlasmaCore.ToolTipArea {
+                anchors.fill: parent
+                active: root.showTooltip && root.orientation === 0
+                mainText: modelData.name
+                subText: chip.tipText
+                textFormat: Text.PlainText
+            }
 
             RowLayout {
                 id: chipRow
