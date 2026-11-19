@@ -1037,8 +1037,14 @@ PlasmoidItem {
                 id: hover
                 cursorShape: Qt.PointingHandCursor
             }
-            TapHandler {
-                onTapped: Qt.openUrlExternally(
+            // A MouseArea (not a TapHandler) so the press is accepted outright:
+            // an unconsumed middle click falls through to the desktop
+            // containment, whose default middle-button action pastes the
+            // clipboard as a Sticky Note.
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.LeftButton | Qt.MiddleButton
+                onClicked: Qt.openUrlExternally(
                     (modelData.platform === "kick" ? "https://kick.com/" : "https://twitch.tv/")
                     + modelData.login)
             }
